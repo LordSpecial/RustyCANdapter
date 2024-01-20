@@ -54,6 +54,8 @@ component SideBarItem inherits Rectangle {
 
 export component SideBar inherits Rectangle {
     in property <[string]> port_select: [];
+    in property <bool> port_connected: false;
+
     in property <[string]> model: [];
     in property <string> title <=> label.text;
     out property <int> current-item: 0;
@@ -130,11 +132,21 @@ export component SideBar inherits Rectangle {
                     alignment: center;
                     // Connect To Candapter
                     ComboBox {
-                        max-width: parent.width*0.9; 
                         model: root.port_select;
                         width: 90%;
                         // Items can be dynamically populated in Rust
                     }
+                }
+            }
+            Row {
+                HorizontalLayout {
+                     alignment: center;
+                     Rectangle {
+                        height: 6px;
+                        width: 70%;
+                        if port-connected : Rectangle { background: #00FF44; }
+                        if !port-connected: Rectangle { background: #EE0000; }
+                        }
                 }
             }
 

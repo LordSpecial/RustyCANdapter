@@ -1,6 +1,6 @@
 mod serial;
 
-use slint::{SharedString, VecModel};
+use slint::{VecModel};
 slint::include_modules!();
 
 fn main() -> Result<(), slint::PlatformError> {

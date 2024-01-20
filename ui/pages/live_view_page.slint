@@ -4,49 +4,18 @@
 import { HorizontalBox, VerticalBox, StandardTableView, GroupBox} from "std-widgets.slint";
 //import { GallerySettings } from "../gallery_settings.slint";
 import { Page } from "page.slint";
+import { CAN-Frame } from "../elements/can_frame.slint";
 
 export global TableViewPageAdapter  {
-    in property <[[StandardListViewItem]]> row_data: [
-        [ { text: "Item 1.1" }, { text: "Item 1.2" }, { text: "Item 1.3" }, { text: "Item 1.4" }, ],
-        [ { text: "Item 2.1" }, { text: "Item 2.2" }, { text: "Item 2.3" }, { text: "Item 2.4" }, ],
-        [ { text: "Item 3.1" }, { text: "Item 3.2" }, { text: "Item 3.3" }, { text: "Item 3.4" }, ],
-        [ { text: "Item 4.1" }, { text: "Item 4.2" }, { text: "Item 4.3" }, { text: "Item 4.4" }, ],
-        [ { text: "Item 5.1" }, { text: "Item 5.2" }, { text: "Item 5.3" }, { text: "Item 5.4" }, ],
-        [ { text: "Item 6.1" }, { text: "Item 6.2" }, { text: "Item 6.3" }, { text: "Item 6.4" }, ],
-        [ { text: "Item 1.1" }, { text: "Item 1.2" }, { text: "Item 1.3" }, { text: "Item 1.4" }, ],
-        [ { text: "Item 2.1" }, { text: "Item 2.2" }, { text: "Item 2.3" }, { text: "Item 2.4" }, ],
-        [ { text: "Item 3.1" }, { text: "Item 3.2" }, { text: "Item 3.3" }, { text: "Item 3.4" }, ],
-        [ { text: "Item 4.1" }, { text: "Item 4.2" }, { text: "Item 4.3" }, { text: "Item 4.4" }, ],
-        [ { text: "Item 5.1" }, { text: "Item 5.2" }, { text: "Item 5.3" }, { text: "Item 5.4" }, ],
-        [ { text: "Item 6.1" }, { text: "Item 6.2" }, { text: "Item 6.3" }, { text: "Item 6.4" }, ],
-        [ { text: "Item 1.1" }, { text: "Item 1.2" }, { text: "Item 1.3" }, { text: "Item 1.4" }, ],
-        [ { text: "Item 2.1" }, { text: "Item 2.2" }, { text: "Item 2.3" }, { text: "Item 2.4" }, ],
-        [ { text: "Item 3.1" }, { text: "Item 3.2" }, { text: "Item 3.3" }, { text: "Item 3.4" }, ],
-        [ { text: "Item 4.1" }, { text: "Item 4.2" }, { text: "Item 4.3" }, { text: "Item 4.4" }, ],
-        [ { text: "Item 5.1" }, { text: "Item 5.2" }, { text: "Item 5.3" }, { text: "Item 5.4" }, ],
-        [ { text: "Item 6.1" }, { text: "Item 6.2" }, { text: "Item 6.3" }, { text: "Item 6.4" }, ],
-        [ { text: "Item 1.1" }, { text: "Item 1.2" }, { text: "Item 1.3" }, { text: "Item 1.4" }, ],
-        [ { text: "Item 2.1" }, { text: "Item 2.2" }, { text: "Item 2.3" }, { text: "Item 2.4" }, ],
-        [ { text: "Item 3.1" }, { text: "Item 3.2" }, { text: "Item 3.3" }, { text: "Item 3.4" }, ],
-        [ { text: "Item 4.1" }, { text: "Item 4.2" }, { text: "Item 4.3" }, { text: "Item 4.4" }, ],
-        [ { text: "Item 5.1" }, { text: "Item 5.2" }, { text: "Item 5.3" }, { text: "Item 5.4" }, ],
-        [ { text: "Item 6.1" }, { text: "Item 6.2" }, { text: "Item 6.3" }, { text: "Item 6.4" }, ],
-        [ { text: "Item 1.1" }, { text: "Item 1.2" }, { text: "Item 1.3" }, { text: "Item 1.4" }, ],
-        [ { text: "Item 2.1" }, { text: "Item 2.2" }, { text: "Item 2.3" }, { text: "Item 2.4" }, ],
-        [ { text: "Item 3.1" }, { text: "Item 3.2" }, { text: "Item 3.3" }, { text: "Item 3.4" }, ],
-        [ { text: "Item 4.1" }, { text: "Item 4.2" }, { text: "Item 4.3" }, { text: "Item 4.4" }, ],
-        [ { text: "Item 5.1" }, { text: "Item 5.2" }, { text: "Item 5.3" }, { text: "Item 5.4" }, ],
-        [ { text: "Item 6.1" }, { text: "Item 6.2" }, { text: "Item 6.3" }, { text: "Item 6.4" }, ],
-    ];
+    in property <[[StandardListViewItem]]> row_data;
 
     callback sort_ascending(int);
     callback sort_descending(int);
 }
 
 export component LiveViewPage inherits Page {
-    title: ("TableView");
-    show-enable-switch: false;
-    description: ("StandardTableView can be used to display a list of text elements in columns and rows. It can be imported from \"std-widgets.slint\"");
+    title: ("Live CAN Messages");
+    description: ("This page shows live traffic on the CAN Bus");
 
     HorizontalBox {
         vertical-stretch: 1;
@@ -56,6 +25,7 @@ export component LiveViewPage inherits Page {
             vertical-stretch: 0;
 
             StandardTableView {
+
                 sort-ascending(index) => {
                     TableViewPageAdapter.sort_ascending(index);
                 }
@@ -65,10 +35,17 @@ export component LiveViewPage inherits Page {
                 }
 
                 columns: [
-                    { title: ("Header 1") },
-                    { title: ("Header 2") },
-                    { title: ("Header 3") },
-                    { title: ("Header 4") },
+                    { title: ("CAN ID")},
+                    { title: ("Byte 1") },
+                    { title: ("Byte 2") },
+                    { title: ("Byte 3") },
+                    { title: ("Byte 4") },
+                    { title: ("Byte 5") },
+                    { title: ("Byte 6") },
+                    { title: ("Byte 7") },
+                    { title: ("Byte 8") },
+                    { title: ("TimeStamp") },
+                    { title: ("Count") },
                 ];
                 rows: TableViewPageAdapter.row_data;
             }

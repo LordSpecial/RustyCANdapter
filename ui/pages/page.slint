@@ -10,9 +10,10 @@ export component Page inherits VerticalBox {
     in property<string> description: "description";
     in property<bool> show-enable-switch: true;
 
-    HorizontalLayout {
-        height: 24px;
+    preferred-width: 1020px;
+    preferred-height: 800px;
 
+    HorizontalLayout {
         Text {
             font-size: 20px;
             text <=> root.title;

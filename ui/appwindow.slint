@@ -1,10 +1,10 @@
 import { Button, VerticalBox } from "std-widgets.slint";
-import { LiveViewPage } from "pages/pages.slint";
+import { LiveViewPage, ScheduledFramesPage, LoggingPage, BusInfoPage, SettingsPage } from "pages/pages.slint";
 import { SideBar } from "side_bar.slint";
 
 export component AppWindow inherits Window {
-    preferred-width: 700px;
-    preferred-height: 500px;
+    preferred-width: 1200px;
+    preferred-height: 800px;
     title: "RustyCANdapter";
 
     in-out property<int> counter: 42;
@@ -13,25 +13,14 @@ export component AppWindow inherits Window {
     HorizontalLayout {
         side-bar := SideBar {
             title: "CANdapter";
-            model: ["Live View", "Scheduled Frames", "Bus Info", "Settings", "About"];
+            model: ["Live View", "Scheduled Frames", "Logging", "Bus Info", "Settings"];
+            width: 0.15 * parent.width;
         }
 
         if(side-bar.current-item == 0) : LiveViewPage {}
-//        if(side-bar.current-item == 0) : ControlsPage {}
-//        if(side-bar.current-item == 2) : TableViewPage {}
-//        if(side-bar.current-item == 3) : TextEditPage {}
-//        if(side-bar.current-item == 4) : EasingsPage {}
-        if(side-bar.current-item == 5) :
-        VerticalBox {
-            Text {
-                text: "Counter: \{root.counter}";
-            }
-            Button {
-                text: "Increase value";
-                clicked => {
-                    root.request-increase-value();
-                }
-            }
-        }
+        if(side-bar.current-item == 1) : ScheduledFramesPage {}
+        if(side-bar.current-item == 2) : LoggingPage {}
+        if(side-bar.current-item == 3) : BusInfoPage {}
+        if(side-bar.current-item == 4) : SettingsPage {}
     }
 }

@@ -130,8 +130,9 @@ export component SideBar inherits Rectangle {
                     alignment: center;
                     // Connect To Candapter
                     ComboBox {
-                         model: root.port_select;
-                         width: 90%;
+                        max-width: parent.width*0.9; 
+                        model: root.port_select;
+                        width: 90%;
                         // Items can be dynamically populated in Rust
                     }
                 }

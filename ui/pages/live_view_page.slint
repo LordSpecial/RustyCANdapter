@@ -4,7 +4,6 @@
 import { HorizontalBox, VerticalBox, StandardTableView, GroupBox} from "std-widgets.slint";
 //import { GallerySettings } from "../gallery_settings.slint";
 import { Page } from "page.slint";
-import { CAN-Frame } from "../elements/can_frame.slint";
 
 export global TableViewPageAdapter  {
     in property <[[StandardListViewItem]]> row_data;
@@ -14,6 +13,7 @@ export global TableViewPageAdapter  {
 }
 
 export component LiveViewPage inherits Page {
+
     title: ("Live CAN Messages");
     description: ("This page shows live traffic on the CAN Bus");
 

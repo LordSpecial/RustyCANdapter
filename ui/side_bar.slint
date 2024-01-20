@@ -53,6 +53,7 @@ component SideBarItem inherits Rectangle {
 }
 
 export component SideBar inherits Rectangle {
+    in property <[string]> port_select: [];
     in property <[string]> model: [];
     in property <string> title <=> label.text;
     out property <int> current-item: 0;
@@ -105,7 +106,7 @@ export component SideBar inherits Rectangle {
 
         // Title
         label := Text {
-            font-size: 16px;
+            font-size: 20px;
             horizontal-alignment: center;
         }
 
@@ -114,6 +115,14 @@ export component SideBar inherits Rectangle {
             height: 2px;
             background: #000000;
         }
+
+        // Title
+        Text {
+            font-size: 14px;
+            horizontal-alignment: center;
+            text: "Select CANdapter";
+        }
+
         GridLayout {
             spacing: 5px;
             Row{
@@ -121,11 +130,13 @@ export component SideBar inherits Rectangle {
                     alignment: center;
                     // Connect To Candapter
                     ComboBox {
+                         model: root.port_select;
                          width: 90%;
                         // Items can be dynamically populated in Rust
                     }
                 }
             }
+
             Row {
             HorizontalLayout {
                     alignment: center;

@@ -3,6 +3,7 @@ import { LiveViewPage, ScheduledFramesPage, LoggingPage, BusInfoPage, SettingsPa
 import { SideBar } from "side_bar.slint";
 
 export component AppWindow inherits Window {
+    in property <[string]> serial-ports;
     preferred-width: 1200px;
     preferred-height: 800px;
     title: "RustyCANdapter";
@@ -12,9 +13,10 @@ export component AppWindow inherits Window {
 
     HorizontalLayout {
         side-bar := SideBar {
-            title: "CANdapter";
+            title: "RustyCANdapter";
             model: ["Live View", "Scheduled Frames", "Logging", "Bus Info", "Settings"];
             width: 0.15 * parent.width;
+            port-select: root.serial_ports;
         }
 
         if(side-bar.current-item == 0) : LiveViewPage {}

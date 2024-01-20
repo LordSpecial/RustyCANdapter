@@ -2,6 +2,8 @@
 
 Build for use the the [FSAE47 Electrical Team](https://www.fsae.co.nz) for use with their CANdapters to allow for better debugging.
 
+![App Demo Image](AppImg.png)
+
 ## About
 
 The standard CANdapter analyser and logger programs kinda suck so here you go

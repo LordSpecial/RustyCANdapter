@@ -6,6 +6,7 @@ version = 3
 name = "RustyCANdapter"
 version = "0.1.0"
 dependencies = [
+ "rand",
  "slint",
  "slint-build",
  "tokio-serial",

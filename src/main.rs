@@ -1,21 +1,19 @@
 mod serial;
+mod can_frame;
 
-use slint::{ModelRc, VecModel, StandardListViewItem};
+use std::rc::Rc;
+use can_frame::CANFrame;
+use slint::{ModelRc, VecModel};
+
 slint::include_modules!();
-
-fn frame_to_std_list_view_item(){}
-
-fn compile_std_list_view_table() {}
 
 fn main() -> Result<(), slint::PlatformError> {
     let ui = AppWindow::new()?;
 
-    let ports_model = std::rc::Rc::new(VecModel::from(serial::get_serial_ports()));
+    let ports_model = Rc::new(VecModel::from(serial::get_serial_ports()));
     ui.set_serial_ports(ports_model.clone().into());
 
-    let test: VecModel<StandardListViewItem> =  vec![StandardListViewItem::from("data 1"), StandardListViewItem::from("data 2"), StandardListViewItem::from("data n")].into();
-    let test_rc = ModelRc::from(std::rc::Rc::new(VecModel::from(test)));
-    let table_model = ModelRc::from(std::rc::Rc::new(VecModel::from(vec![test_rc.clone(), test_rc.clone()])));
-    ui.set_table_data_in(table_model);
+    let table_model = ModelRc::from(Rc::new(VecModel::from(vec![CANFrame::generate_random(Some("100")).to_model_rc(), CANFrame::generate_random(Some("123")).to_model_rc(), CANFrame::generate_random(None).to_model_rc(), CANFrame::generate_random(None).to_model_rc(), CANFrame::generate_random(None).to_model_rc(), CANFrame::generate_random(None).to_model_rc(), CANFrame::generate_random(None).to_model_rc()])));
+    ui.set_table_data(table_model);
     ui.run()
 }

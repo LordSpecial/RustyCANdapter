@@ -18,6 +18,66 @@ pub struct CANFrame {
     pub count: u8,
 }
 
+impl CANFrame {
+    pub fn parse(message: String) -> Option<Self> {
+        if !message.starts_with("b'") || !message.ends_with('\r') {
+            return None;
+        }
+
+        let mut chars = message.chars().skip(2); // Skip "b'"
+
+        let is_extended_id = chars.next()? == 'x'; // Check for extended ID
+        let id_end = if is_extended_id { 11 } else { 6 };
+
+        let can_id: String = chars.by_ref().take(id_end - 3).collect();
+
+        let data_len = chars.next()?.to_digit(10)? as usize;
+        if data_len > 8 { return None; }
+
+        let data_hex: String = chars.take(data_len * 2).collect();
+        let mut data_bytes = Vec::new();
+        for i in (0..data_hex.len()).step_by(2) {
+            let byte_str = &data_hex[i..i + 2];
+            let byte = u8::from_str_radix(byte_str, 16).ok()?;
+            data_bytes.push(byte);
+        }
+
+        while data_bytes.len() < 8 {
+            data_bytes.push(0);
+        }
+
+        Some(CANFrame {
+            can_id,
+            byte_1_data: data_bytes[0],
+            byte_2_data: data_bytes[1],
+            byte_3_data: data_bytes[2],
+            byte_4_data: data_bytes[3],
+            byte_5_data: data_bytes[4],
+            byte_6_data: data_bytes[5],
+            byte_7_data: data_bytes[6],
+            byte_8_data: data_bytes[7],
+            timestamp: 0, // Placeholder
+            count: 0,     // Placeholder
+        })
+    }
+
+    pub fn to_string(&self) -> String {
+        let mut msg= String::from(&self.can_id);
+        msg.push_str(" ");
+        let data = vec![
+            self.byte_1_data, self.byte_2_data, self.byte_3_data, self.byte_4_data,
+            self.byte_5_data, self.byte_6_data, self.byte_7_data, self.byte_8_data,
+        ];
+        msg.push_str(&format!("{}", data.len()/2));
+        msg.push_str(" ");
+        for &byte in &data {
+            msg.push_str(&format!("{:02X},", byte));
+        }
+        msg.push('\r');
+        msg
+    }
+}
+
 pub struct CANFrameStorage {
     frames: HashMap<String, CANFrame>,
 }

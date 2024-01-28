@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 use slint::{ModelRc, SharedString, StandardListViewItem, VecModel};
 use rand::random;
+use strum_macros::{Display, EnumIter};
 
 #[derive(Clone)]
 pub struct CANFrame {
@@ -16,6 +17,18 @@ pub struct CANFrame {
     pub byte_8_data: u8,
     pub timestamp: u16,
     pub count: u8,
+}
+
+#[derive(Copy, Clone, EnumIter, Display, PartialEq)]
+pub enum CANRate {
+    Kb10 = 0,
+    Kb20,
+    Kb50,
+    Kb100,
+    Kb250,
+    Kb500,
+    Kb800,
+    Mb1,
 }
 
 impl CANFrame {

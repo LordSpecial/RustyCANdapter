@@ -19,9 +19,9 @@ pub struct CANFrame {
 }
 
 impl CANFrame {
-    pub fn parse(message: String) -> Option<Self> {
+    pub fn parse(message: String) -> Result<Self, String> {
         if !message.starts_with("b'") || !message.ends_with('\r') {
-            return None;
+            return Err("Didn't start or end in b or \\r".to_string());
         }
 
         let mut chars = message.chars().skip(2); // Skip "b'"
@@ -32,7 +32,7 @@ impl CANFrame {
         let can_id: String = chars.by_ref().take(id_end - 3).collect();
 
         let data_len = chars.next()?.to_digit(10)? as usize;
-        if data_len > 8 { return None; }
+        if data_len > 8 { return Err("To much data to parse.".to_string()); }
 
         let data_hex: String = chars.take(data_len * 2).collect();
         let mut data_bytes = Vec::new();
@@ -46,7 +46,7 @@ impl CANFrame {
             data_bytes.push(0);
         }
 
-        Some(CANFrame {
+        Ok(CANFrame {
             can_id,
             byte_1_data: data_bytes[0],
             byte_2_data: data_bytes[1],
@@ -123,13 +123,15 @@ impl CANFrame {
     }
 
     pub fn generate_random(can_id: Option<&str>) -> CANFrame {
+        let id = can_id // This FUCKING SUCKS but I'm too lazy to figure this out myself
+            .map(|s| s.to_string()) // Converts Option<&str> to Option<String>
+            .unwrap_or_else(|| {
+                let random_number = random::<u8>(); // Generates a random u8
+                random_number.to_string() // Converts the random number to a String
+            });
+
         CANFrame {
-            can_id: can_id // This FUCKING SUCKS but I'm too lazy to figure this out myself
-                .map(|s| s.to_string()) // Converts Option<&str> to Option<String>
-                .unwrap_or_else(|| {
-                    let random_number = random::<u8>(); // Generates a random u8
-                    random_number.to_string() // Converts the random number to a String
-                }),
+            can_id: id,
             byte_1_data: random::<u8>(),
             byte_3_data: random::<u8>(),
             byte_4_data: random::<u8>(),

@@ -1,9 +1,10 @@
 import { Button, VerticalBox } from "std-widgets.slint";
-import { LiveViewPage, ScheduledFramesPage, LoggingPage, BusInfoPage, SettingsPage } from "pages/pages.slint";
+import { LiveViewPage, LiveViewPageAdapter,ScheduledFramesPage, LoggingPage, BusInfoPage, SettingsPage } from "pages/pages.slint";
 import { SideBar } from "side_bar.slint";
 
 export component AppWindow inherits Window {
     in property <[string]> serial-ports;
+    in property <[string]> test;
     in property <[[StandardListViewItem]]> table_data;
     preferred-width: 1200px;
     preferred-height: 800px;
@@ -21,7 +22,7 @@ export component AppWindow inherits Window {
         }
 
         if(side-bar.current-item == 0) : LiveViewPage {
-            table_data: table_data;
+            fuckyou: table_data;
         }
         if(side-bar.current-item == 1) : ScheduledFramesPage {}
         if(side-bar.current-item == 2) : LoggingPage {}

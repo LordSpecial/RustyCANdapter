@@ -1,4 +1,10 @@
+use std::time::Duration;
 use slint::SharedString;
+use tokio::io;
+
+use tokio::sync::mpsc;
+use tokio_serial::SerialStream;
+use crate::can_frame::CANFrame;
 
 pub fn get_serial_ports() -> Vec<SharedString> {
     let ports: Vec<SharedString> = tokio_serial::available_ports()
@@ -15,4 +21,45 @@ pub fn get_serial_ports() -> Vec<SharedString> {
         })
         .collect();
     return ports;
+}
+
+pub async fn serial_port_task(com_port: &str, tx: mpsc::UnboundedSender<CANFrame>) {
+    println!("Created Serial Thread");
+
+    let mut port = match SerialStream::open(&tokio_serial::new(com_port, 115200)) {
+        Ok(port) => port,
+        Err(e) => {
+            println!("Can't Open port: {:?}", e);
+            return;
+        },
+    };
+    println!("Success");
+    let mut buf = vec![0; 1024];
+    loop {
+        // Would do readable but it shits the bed
+        match port.try_read(&mut buf) {
+            Ok(n) if n > 0 => {
+                let received_data = String::from_utf8_lossy(&buf[..n]);
+                println!("Serial Received: {}", received_data.to_string());
+                let _ = match CANFrame::parse(received_data.to_string()) {
+                    Ok(frame) => {
+                        println!("Sending  {}", frame.to_string());
+                        tx.send(frame)
+                    },
+                    Err(e) => {
+                        println!("Error parsing CAN frame: {:?}", e);
+                        continue;
+                    },
+                };
+
+            },
+            Ok(_) => {},
+            Err(ref e) if e.kind() == io::ErrorKind::WouldBlock => {},
+            Err(e) => {
+                eprintln!("Error reading from serial port: {:?}", e);
+                break;
+            }
+        };
+        tokio::time::sleep(Duration::from_millis(10)).await;
+    }
 }

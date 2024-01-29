@@ -5,33 +5,39 @@ import { HorizontalBox, VerticalBox, StandardTableView, GroupBox} from "std-widg
 //import { GallerySettings } from "../gallery_settings.slint";
 import { Page } from "page.slint";
 
-export global TableViewPageAdapter  {
-    in property <[[StandardListViewItem]]> row_data;
+export global LiveViewPageAdapter  {
+    in property <[[StandardListViewItem]]> table_data;
+    in property <string> test: "default";
 
     callback sort_ascending(int);
     callback sort_descending(int);
 }
 
 export component LiveViewPage inherits Page {
-
-    in property <[[StandardListViewItem]]> table_data;
+    in property <[[StandardListViewItem]]> fuckyou;
     title: ("Live CAN Messages");
     description: ("This page shows live traffic on the CAN Bus");
 
+    Text {
+        font-size: 14px;
+        horizontal-alignment: center;
+        text: LiveViewPageAdapter.test;
+
+    }
     HorizontalBox {
         vertical-stretch: 1;
-
+        // Title
         GroupBox {
             vertical-stretch: 0;
 
             StandardTableView {
 
                 sort-ascending(index) => {
-                    TableViewPageAdapter.sort_ascending(index);
+                    LiveViewPageAdapter.sort_ascending(index);
                 }
 
                 sort-descending(index) => {
-                    TableViewPageAdapter.sort-descending(index);
+                    LiveViewPageAdapter.sort-descending(index);
                 }
 
                 columns: [
@@ -47,7 +53,7 @@ export component LiveViewPage inherits Page {
                     { title: ("TimeStamp") },
                     { title: ("Count") },
                 ];
-                rows: table_data;
+                rows: fuckyou;
             }
         }
     }

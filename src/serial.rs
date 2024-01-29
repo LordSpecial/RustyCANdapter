@@ -23,7 +23,7 @@ pub fn get_serial_ports() -> Vec<SharedString> {
     return ports;
 }
 
-pub async fn serial_port_task(com_port: &str, tx: mpsc::UnboundedSender<CANFrame>) {
+pub async fn serial_port_monitor(com_port: &str, tx: mpsc::UnboundedSender<CANFrame>) {
     println!("Created Serial Thread");
 
     let mut port = match SerialStream::open(&tokio_serial::new(com_port, 115200)) {
@@ -40,10 +40,10 @@ pub async fn serial_port_task(com_port: &str, tx: mpsc::UnboundedSender<CANFrame
         match port.try_read(&mut buf) {
             Ok(n) if n > 0 => {
                 let received_data = String::from_utf8_lossy(&buf[..n]);
-                println!("Serial Received: {}", received_data.to_string());
+                //println!("Serial Received: {}", received_data.to_string());
                 let _ = match CANFrame::parse(received_data.to_string()) {
                     Ok(frame) => {
-                        println!("Sending  {}", frame.to_string());
+                        //println!("Sending  {}", frame.to_string());
                         tx.send(frame)
                     },
                     Err(e) => {

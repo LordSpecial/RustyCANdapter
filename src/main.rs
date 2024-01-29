@@ -30,7 +30,7 @@ fn main() -> () {
     let rt = Builder::new_multi_thread().enable_all().build().unwrap();
 
     println!("Start Serial Monitor");
-    rt.spawn(serial::serial_port_task("COM4", tx)); //
+    rt.spawn(serial::serial_port_monitor("COM4", tx));
     println!("Start UI handler");
     rt.spawn(ui_handler::ui_update_task(ui_handle, rx));
     // Keep the main thread running

@@ -56,10 +56,13 @@ export component SideBar inherits Rectangle {
     in property <[string]> port_select: [];
     in property <bool> port_connected: false;
 
+    callback on_print_selection(string);
+
     in property <[string]> model: [];
     in property <string> title <=> label.text;
     out property <int> current-item: 0;
     out property <int> current-focused: fs.has-focus ? fs.focused-tab : -1; // The currently focused tab
+    in property <string> selected_port;
 
     forward-focus: fs;
     accessible-role: tab;
@@ -131,9 +134,10 @@ export component SideBar inherits Rectangle {
                 HorizontalLayout {
                     alignment: center;
                     // Connect To Candapter
-                    ComboBox {
+                    PortSelectComboBox:= ComboBox {
                         model: root.port_select;
                         width: 90%;
+                        selected => {root.selected-port}
                         // Items can be dynamically populated in Rust
                     }
                 }
@@ -165,7 +169,7 @@ export component SideBar inherits Rectangle {
                     // Connect Button
                     Button {
                         text: "Connect";
-                        clicked => { /* Rust callback for connect */ }
+                        clicked => { root.on_print_selection(PortSelectComboBox.current-value); }
                     }
                 }
             }

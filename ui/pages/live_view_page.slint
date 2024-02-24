@@ -7,8 +7,6 @@ import { Page } from "page.slint";
 
 export global LiveViewPageAdapter  {
     in property <[[StandardListViewItem]]> table_data;
-    in property <string> test: "default";
-
     callback sort_ascending(int);
     callback sort_descending(int);
 }
@@ -17,13 +15,6 @@ export component LiveViewPage inherits Page {
     in property <[[StandardListViewItem]]> fuckyou;
     title: ("Live CAN Messages");
     description: ("This page shows live traffic on the CAN Bus");
-
-    Text {
-        font-size: 14px;
-        horizontal-alignment: center;
-        text: LiveViewPageAdapter.test;
-
-    }
     HorizontalBox {
         vertical-stretch: 1;
         // Title

@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use slint:: {VecModel};
+use slint::{SharedString, VecModel};
 use tokio::runtime::Builder;
 use tokio::sync::mpsc;
 use tokio::sync::mpsc::{UnboundedReceiver, UnboundedSender};
@@ -29,8 +29,13 @@ fn main() -> () {
     println!("Creat Tokio Runtime");
     let rt = Builder::new_multi_thread().enable_all().build().unwrap();
 
+    // Connect to serial Port
+    ui.on_fuckoff(move |string| {
+        ui_handler::connect_to_com_port(string);
+    });
+
     println!("Start Serial Monitor");
-    rt.spawn(serial::serial_port_monitor("COM4", tx));
+    // rt.spawn(serial::serial_port_monitor, tx));
     println!("Start UI handler");
     rt.spawn(ui_handler::ui_update_task(ui_handle, rx));
     // Keep the main thread running

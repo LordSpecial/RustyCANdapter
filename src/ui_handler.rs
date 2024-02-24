@@ -1,8 +1,9 @@
-use slint::{ModelRc, StandardListViewItem, VecModel, Weak};
+use slint::{ModelRc, SharedString, StandardListViewItem, VecModel, Weak};
 use tokio::sync::mpsc;
+use tokio_serial::SerialStream;
 
 use crate::can_frame::{CANFrame, CANFrameStorage};
-
+use std::io::Error as E;
 use super::AppWindow;
 
 // Function to handle UI updates
@@ -30,4 +31,14 @@ pub async fn ui_update_task(ui_handle: Weak<AppWindow>, mut rx: mpsc::UnboundedR
             }
         }).unwrap();
     }
+}
+
+
+pub fn connect_to_com_port(selection: SharedString) -> tokio_serial::Result<SerialStream> {
+    let binding = selection.to_string();
+    let com_port = binding.split_whitespace().next().unwrap_or_default();
+    println!("Connecting");
+    let port = SerialStream::open(&tokio_serial::new(com_port, 115200));
+    println!("Connectinged");
+    return port;
 }

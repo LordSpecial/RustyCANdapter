@@ -6,12 +6,14 @@ export component AppWindow inherits Window {
     in property <[string]> serial-ports;
     in property <[string]> test;
     in property <[[StandardListViewItem]]> table_data;
+
+    callback fuckoff <=> side-bar.on_print_selection;
+
+
     preferred-width: 1200px;
     preferred-height: 800px;
     title: "RustyCANdapter";
 
-    in-out property<int> counter: 42;
-    callback request-increase-value();
 
     HorizontalLayout {
         side-bar := SideBar {

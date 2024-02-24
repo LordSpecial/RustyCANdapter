@@ -23,16 +23,10 @@ pub fn get_serial_ports() -> Vec<SharedString> {
     return ports;
 }
 
-pub async fn serial_port_monitor(com_port: &str, tx: mpsc::UnboundedSender<CANFrame>) {
+pub async fn serial_port_monitor(mut port: SerialStream, tx: mpsc::UnboundedSender<CANFrame>) {
     println!("Created Serial Thread");
 
-    let mut port = match SerialStream::open(&tokio_serial::new(com_port, 115200)) {
-        Ok(port) => port,
-        Err(e) => {
-            println!("Can't Open port: {:?}", e);
-            return;
-        },
-    };
+
     println!("Success");
     let mut buf = vec![0; 1024];
     loop {
